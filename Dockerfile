@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment
-RUN pip install --ignore-installed requests pytz
+RUN pip install --break-system-packages requests pytz
 
 # Move python scripts to /var/lib/telegraf/
 COPY ./scripts/* /var/lib/telegraf/
