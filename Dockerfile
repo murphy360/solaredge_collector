@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Create virtual environment
 RUN python -m venv solaredge-env
-ENV PATH="/solaredge-env/bin:$PATH"
+ENV PATH="/solaredge-env/bin/activate/:$PATH"
 
 # Install python dependencies
 RUN python3 -m pip3 install --system --include-deps requests pytz
