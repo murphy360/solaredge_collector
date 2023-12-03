@@ -1,18 +1,13 @@
-FROM telegraf:latest
+FROM telegraf:1.12.3
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
-    pipx \
-    pip \
+    python3-pip \
     && \
 	rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment
-RUN python3 -m venv solaredge-env
-ENV PATH="/solaredge-env/bin/activate/:$PATH"
-
-# Install python dependencies
-RUN python3 -m pip install requests pytz
+RUN pip3 install --ignore-installed requests pytz
 
 # Move python scripts to /var/lib/telegraf/
 COPY ./scripts/* /var/lib/telegraf/
