@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment
-RUN python3 -m venv solaredge-env && source solaredge-env/bin/activate
+RUN python -m venv solaredge-env
+ENV PATH="/solaredge-env/bin:$PATH"
 
 # Install python dependencies
 RUN python3 -m pip3 install --system --include-deps requests pytz
 
 # Move python scripts to /var/lib/telegraf/
-COPY ./scripts/solaredge_main.py /var/lib/telegraf/
-COPY ./scripts/solarEdgeCloudScraper.py /var/lib/telegraf/
+COPY ./scripts/* /var/lib/telegraf/
