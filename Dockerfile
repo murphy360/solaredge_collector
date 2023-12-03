@@ -6,3 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pip \
     && \
 	rm -rf /var/lib/apt/lists/*
+
+RUN pipx install --system --include-deps \
+    requests 
