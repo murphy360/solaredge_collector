@@ -7,5 +7,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && \
 	rm -rf /var/lib/apt/lists/*
 
-RUN pipx install --system --include-deps \
-    requests 
+RUN python3 -m venv solaredge-env && source solaredge-env/bin/activate
+   
+RUN python3 -m pip3 install --system --include-deps requests pytz
