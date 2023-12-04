@@ -1,6 +1,6 @@
 FROM telegraf
 
-RUN apt-get update 
+RUN sudo apt-get update 
 
 RUN apt-get install -y --no-install-recommends python3
 
