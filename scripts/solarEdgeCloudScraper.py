@@ -564,7 +564,6 @@ if len(sys.argv) == 2:
 while True:
     # Always run at the end of the day ~midnight to get the most accurate daily data.
     # Assumption: it will be dark by midnight
-    source /solaredge-env/bin/activate
     now = datetime.datetime.now()
     nextUpdate = now.replace(hour=UPDATE_INTERVAL_HOUR,
                              minute=UPDATE_INTERVAL_MIN,
