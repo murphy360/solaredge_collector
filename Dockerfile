@@ -1,4 +1,4 @@
-FROM telegraf:1.12.3
+FROM telegraf
 
 RUN apt-get update 
 
