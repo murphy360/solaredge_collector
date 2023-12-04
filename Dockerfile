@@ -12,8 +12,9 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN pip install --break-system-packages requests pytz
 
 # Move python scripts to /var/lib/telegraf/
-COPY ./scripts/solaredge_main.py /var/lib/telegraf/
-COPY ./scripts/solarEdgeCloudScraper.py /var/lib/telegraf/
+RUN mkdir /solaredge
+COPY ./scripts/solaredge_main.py /solaredge/
+COPY ./scripts/solarEdgeCloudScraper.py /solaredge/
 
 # list contents of /var/lib/telegraf/
-RUN ls -la /var/lib/telegraf/
+RUN ls -la /solaredge/
