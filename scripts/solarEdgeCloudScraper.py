@@ -271,6 +271,7 @@ def ensure_logged_in(session: requests.Session, function):
 
     return function()
 
+# Update all data for the given end time
 
 def update_all_data(endTime: datetime.datetime):
     playbackTimeStamps = LAST_UPDATES['playback']
@@ -307,7 +308,8 @@ def update_all_data(endTime: datetime.datetime):
 
 # API
 
-
+# Input start and end time in UTC
+# Returns True on success
 def get_power_api(site: str, startTime: datetime, endTime: datetime):
     r = requests.get(f"{BASE_API_URL}/site/{site}/powerDetails.json", {
         'startTime': format_datetime_url(startTime),
@@ -323,6 +325,7 @@ def get_power_api(site: str, startTime: datetime, endTime: datetime):
     json = r.json()
     multiplier = wh_unit_to_multiplier(json['powerDetails']['unit'])
     for meter in json['powerDetails']['meters']:
+
         type = meter['type'].lower()
         for point in meter['values']:
             if 'value' in point:
