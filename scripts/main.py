@@ -2,6 +2,16 @@ import time
 import requests
 import solar_edge_site
 import datetime
+import os
+
+# Define variables
+api_key = os.environ.get("SOLAR_EDGE_API_KEY")
+print("api_key) = {}".format(api_key))
+account_key = os.environ.get("SOLAR_EDGE_ACCOUNT_KEY")
+print("account_key) = {}".format(account_key))
+base_url = f"https://monitoringapi.solaredge.com/site/472452/details?api_key={api_key}"
+print(base_url)
+
 
 # Define main function
 def main():
@@ -24,15 +34,9 @@ def main():
 
 
 
-base_url = "https://monitoringapi.solaredge.com/site/472452/details?api_key=MHV1XR4UL18XZIGIUP9H9QYLU5N4WGDC"
-account_key = "472452"
-api_key = "MHV1XR4UL18XZIGIUP9H9QYLU5N4WGDC"
-
-url = base_url.format(account_key, api_key)
-site  = requests.get(base_url).json()
-
 # Call main function
 
 main()
 #mysite.get_site_inverters()
+
 
