@@ -18,7 +18,7 @@ COPY ./scripts/solarEdgeCloudScraper.py /solaredge/
 COPY ./conf/sample.conf /etc/telegraf/telegraf.conf
 
 RUN chmod +x /solaredge/*.py
-RUN chmod 777 /etc/telegraf/telegrafs.conf
+RUN chmod 777 /etc/telegraf/telegraf.conf
 # list contents of /var/lib/telegraf/
 RUN ls -la /solaredge/
 RUN ls -la /etc/telegraf/
