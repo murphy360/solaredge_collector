@@ -20,3 +20,4 @@ COPY ./conf/telegraf.conf /etc/telegraf/telegraf.conf
 RUN chmod +x /solaredge/*.py
 # list contents of /var/lib/telegraf/
 RUN ls -la /solaredge/
+RUN ls -la /etc/telegraf/
