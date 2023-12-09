@@ -23,3 +23,4 @@ RUN chmod +x /etc/telegraf/telegraf.conf
 # list contents of /var/lib/telegraf/
 RUN ls -la /solaredge/
 RUN ls -la /etc/telegraf/
+RUN cat /etc/telegraf/telegraf.conf
