@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-WORKDIR /solaredge
+WORKDIR /
 
 COPY /scripts /solaredge/scripts
 COPY /conf /solaredge/conf
