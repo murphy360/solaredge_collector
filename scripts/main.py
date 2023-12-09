@@ -1,5 +1,4 @@
 import time
-import requests
 import solar_edge_site
 import datetime
 import os
