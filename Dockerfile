@@ -1,32 +1,12 @@
-FROM telegraf
+FROM ubuntu:latest
 
-RUN apt-get update 
+WORKDIR /solaredge
 
-RUN apt-get install -y --no-install-recommends python3
+COPY /scripts /solaredge/scripts
+COPY /conf /solaredge/conf
 
-RUN apt-get install -y --no-install-recommends python3-pip
-    
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \ apt-get install -y python3 python3-pip
+ 
+RUN pip3 install -r requirements.txt
 
-# Create virtual environment
-RUN pip install --break-system-packages requests pytz
-
-# Move python scripts to /var/lib/telegraf/
-RUN mkdir /solaredge
-COPY ./scripts/* /solaredge/
-
-RUN ls -la /etc/telegraf/
-RUN cat /etc/telegraf/telegraf.conf
-
-COPY ./conf/telegraf.conf /etc/telegraf/telegraf.conf
-
-RUN chmod +x /solaredge/*.py
-RUN chmod 777 /etc/telegraf/telegraf.conf
-
-RUN chmod +x /etc/telegraf/telegraf.conf
-# list contents of /var/lib/telegraf/
-RUN ls -la /solaredge/
-RUN ls -la /etc/telegraf/
-RUN cat /etc/telegraf/telegraf.conf
-
-CMD [ "python3 /solaredge/main.py" ] 
+CMD ["python3", "main.py"] 
