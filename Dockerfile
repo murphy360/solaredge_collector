@@ -29,4 +29,4 @@ RUN ls -la /solaredge/
 RUN ls -la /etc/telegraf/
 RUN cat /etc/telegraf/telegraf.conf
 
-RUN python3 /solaredge/main.py
+CMD [ "python3 /solaredge/main.py" ] 
