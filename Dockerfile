@@ -13,9 +13,8 @@ RUN pip install --break-system-packages requests pytz
 
 # Move python scripts to /var/lib/telegraf/
 RUN mkdir /solaredge
-COPY ./scripts/solaredge_main.py /solaredge/
-COPY ./scripts/solarEdgeCloudScraper.py /solaredge/
-COPY ./conf/sample.conf /etc/telegraf/telegraf.conf
+COPY ./scripts/* /solaredge/
+COPY ./conf/telegraf.conf /etc/telegraf/telegraf.conf
 
 RUN chmod +x /solaredge/*.py
 RUN chmod 777 /etc/telegraf/telegraf.conf
