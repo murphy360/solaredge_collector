@@ -1,21 +1,25 @@
-FROM ubuntu:22.04
+FROM telegraf
 
+RUN apt-get update 
 
-RUN curl -s https://repos.influxdata.com/influxdata-archive.key > influxdata-archive.key && \
-    echo '943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515 influxdata-archive.key' | \
-    sha256sum -c && cat influxdata-archive.key | \
-    gpg --dearmor | \
-    sudo tee /etc/apt/trusted.gpg.d/influxdata-archive.gpg > /dev/null && \
-    echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' | \
-    sudo tee /etc/apt/sources.list.d/influxdata.list && \
-    sudo apt-get update && sudo apt-get install telegraf python3 python3-pip -y && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y --no-install-recommends python3
+
+RUN apt-get install -y --no-install-recommends python3-pip
+    
+RUN rm -rf /var/lib/apt/lists/*
+
+# Create virtual environment
+RUN pip install --break-system-packages requests pytz
 
 # Move python scripts to /var/lib/telegraf/
 RUN mkdir /solaredge
 COPY ./scripts/* /solaredge/
 COPY ./conf/telegraf.conf /etc/telegraf/telegraf.conf
 
+RUN chmod +x /solaredge/*.py
+RUN chmod 777 /etc/telegraf/telegraf.conf
+
+RUN chmod +x /etc/telegraf/telegraf.conf
 # list contents of /var/lib/telegraf/
 RUN ls -la /solaredge/
 RUN ls -la /etc/telegraf/
