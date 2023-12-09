@@ -5,8 +5,8 @@ import datetime
 import os
 
 # Define variables
-api_key = os.environ.get("SOLAR_EDGE_API_KEY")
-account_key = os.environ.get("SOLAREDGE_ACCOUNT_KEY")
+account_key = "472452"
+api_key = "MHV1XR4UL18XZIGIUP9H9QYLU5N4WGDC"
 print("api_key) = {}".format(api_key))
 print("account_key_site) = {}".format(account_key))
 base_url = f"https://monitoringapi.solaredge.com/site/{account_key}/details?api_key={api_key}"
