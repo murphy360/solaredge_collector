@@ -6,7 +6,7 @@ COPY /scripts /solaredge/scripts
 COPY /conf /solaredge/conf
 COPY requirements.txt /solaredge/requirements.txt
 
-RUN apt update && apt install -y python3 python3-pip
+RUN apt update && apt install -y python3 python3-pip json
  
 RUN pip3 install -r /solaredge/requirements.txt
 
