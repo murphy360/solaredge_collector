@@ -26,9 +26,11 @@ def main():
         first_day_of_this_month = today_string[:8] + "01"
         mysite = solar_edge_site.SolarEdgeSite(site, account_key, api_key)
         mysite.print_site() 
-        # print mysite to mysite.json at /data
-        with open('/data/mysite.json', 'w') as f:
-            json.dump(mysite, f)
+        #convert to json
+        json_object = json.dumps(mysite, indent = 4)
+        #print(json_object)
+        with open("mysite.json", "w") as outfile:
+            outfile.write(json_object)
         mysite.get_energy_details(first_day_of_this_month, today_string)
         current_power = mysite.get_current_power()
         print("Current power: {}".format(current_power))
