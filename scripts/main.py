@@ -1,4 +1,3 @@
-import json
 import time
 import solar_edge_site
 import requests
