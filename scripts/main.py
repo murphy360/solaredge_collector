@@ -25,20 +25,22 @@ def main():
         today_string = datetime.date.today().isoformat()
         first_day_of_this_month = today_string[:8] + "01"
         mysite = solar_edge_site.SolarEdgeSite(site, account_key, api_key)
-        mysite.print_site() 
-        #convert to json
-        json_object = json.dumps(mysite, indent = 4)
-        #print(json_object)
-        with open("mysite.json", "w") as outfile:
-            outfile.write(json_object)
+        with open("mysite.txt", "w") as outfile:
+            outfile.write(mysite.print_site() )
         mysite.get_energy_details(first_day_of_this_month, today_string)
         current_power = mysite.get_current_power()
         print("Current power: {}".format(current_power))
+        time = datetime.datetime.now().isoformat()
+        # delete the file if it exists
         if current_power > 0:
+            with open("power.txt", "a") as outfile:
+                outfile.write("time: {} Power is on\n".format(time))
             print("Power is on")
         else:
+            with open("power.txt", "a") as outfile:
+                outfile.write("time: {} Power is off\n".format(time))
             print("Power is off")
-        time.sleep(30*60)
+        time.sleep(30*60) # Wait 30 minutes
 
 
 
