@@ -7,13 +7,8 @@ import os
 # Define variables
 api_key = os.environ.get("SOLAR_EDGE_API_KEY")
 account_key = os.environ.get("SOLAREDGE_ACCOUNT_KEY")
-print("api_key = {}".format(api_key))
-print("account_key_site = {}".format(account_key))
-base_url = f"https://monitoringapi.solaredge.com/site/{account_key}/details?api_key={api_key}"
-print(base_url)
-site  = requests.get(base_url).json()
-print(site)
 request_interval = 30 # minutes
+mysite = solar_edge_site.SolarEdgeSite(account_key, api_key)
 
 
 # Define main function
