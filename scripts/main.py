@@ -25,7 +25,6 @@ def main():
         today_string = datetime.date.today().isoformat()
         first_day_of_this_month = today_string[:8] + "01"
         mysite = solar_edge_site.SolarEdgeSite(site, account_key, api_key)
-        #mysite.print_site()
         energy_details = mysite.get_energy_details(first_day_of_this_month, today_string, "QUARTER_OF_AN_HOUR")
         # to json file
         with open("energy_details.json", "w") as outfile:
