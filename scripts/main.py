@@ -25,7 +25,7 @@ def main():
         today_string = datetime.date.today().isoformat()
         first_day_of_this_month = today_string[:8] + "01"
         mysite = solar_edge_site.SolarEdgeSite(site, account_key, api_key)
-        mysite.print_site()
+        #mysite.print_site()
         energy_details = mysite.get_energy_details(first_day_of_this_month, today_string, "QUARTER_OF_AN_HOUR")
         # to json file
         with open("energy_details.json", "w") as outfile:
@@ -38,7 +38,7 @@ def main():
         # to json file
         with open("mysitesite.json", "w") as outfile:
             outfile.write(str(current_site))
-            
+
         now_string = datetime.datetime.now().isoformat()
         future_string = datetime.datetime.now() + datetime.timedelta(minutes=request_interval)
         future_string = future_string.isoformat()
