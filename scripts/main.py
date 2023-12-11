@@ -24,19 +24,23 @@ def main():
     while True:
         today_string = datetime.date.today().isoformat()
         first_day_of_this_month = today_string[:8] + "01"
-        mysite = solar_edge_site.SolarEdgeSite(site, account_key, api_key)
-        energy_details = mysite.get_energy_details(first_day_of_this_month, today_string, "QUARTER_OF_AN_HOUR")
+        mysite.refresh_site_data(today_string, first_day_of_this_month)
         # to json file
         with open("energy_details.json", "w") as outfile:
-            outfile.write(str(energy_details))
-        current_power = mysite.get_current_power()
-        # to json file
+            outfile.write(str(mysite.energy_details))
+    
+        # Energy Details to JSON
+        with open("energy_details.json", "w") as outfile:
+            outfile.write(str(mysite.energy_details))
+        # Current Power to JSON
         with open("current_power.json", "w") as outfile:
-            outfile.write(str(current_power))
-        current_site = mysite.get_site_as_json()
-        # to json file
-        with open("mysitesite.json", "w") as outfile:
-            outfile.write(str(current_site))
+            outfile.write(str(mysite.current_power))
+        # Inverters to JSON
+        with open("site_inverters.json", "w") as outfile:
+            outfile.write(str(mysite.site_inverters))
+        # Meters Data to JSON
+        with open("meters_data.json", "w") as outfile:
+            outfile.write(str(mysite.meters_data))
 
         now_string = datetime.datetime.now().isoformat()
         future_string = datetime.datetime.now() + datetime.timedelta(minutes=request_interval)

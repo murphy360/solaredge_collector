@@ -34,41 +34,33 @@ import requests
 
 
 class SolarEdgeSite:
-    def __init__(self, data, site_id, api_key):
+    def __init__(self, site_id, api_key):
         self.site_id = site_id
         self.api_key = api_key
-        self.id = data['details']['id']
-        self.name = data['details']['name']
-        self.accountId = data['details']['accountId']
-        self.status = data['details']['status']
-        self.peakPower = data['details']['peakPower']
-        self.lastUpdateTime = data['details']['lastUpdateTime']
-        self.installationDate = data['details']['installationDate']
-        self.ptoDate = data['details']['ptoDate']
-        self.notes = data['details']['notes']
-        self.type = data['details']['type']
-        self.location = data['details']['location']
-        self.primaryModule = data['details']['primaryModule']
-        self.uris = data['details']['uris']
-        self.publicSettings = data['details']['publicSettings']
 
-    def print_site(self):
-        print("id: {}".format(self.id))
-        print("name: {}".format(self.name))
-        print("accountId: {}".format(self.accountId))
-        print("status: {}".format(self.status))
-        print("peakPower: {}".format(self.peakPower))
-        print("lastUpdateTime: {}".format(self.lastUpdateTime))
-        print("installationDate: {}".format(self.installationDate))
-        print("ptoDate: {}".format(self.ptoDate))
-        print("notes: {}".format(self.notes))
-        print("type: {}".format(self.type))
-        print("location: {}".format(self.location))
-        print("primaryModule: {}".format(self.primaryModule))
-        print("uris: {}".format(self.uris))
-        print("publicSettings: {}".format(self.publicSettings))
+    def refresh_site_data(self, start_date, end_date):
+        base_url = "https://monitoringapi.solaredge.com/site/{}/details?api_key={}"
+        url = base_url.format(self.site_id, self.api_key)
+        self.site = requests.get(url).json()
+        self.id = self.site['details']['id']
+        self.name = self.site['details']['name']
+        self.accountId = self.site['details']['accountId']
+        self.status = self.site['details']['status']
+        self.peakPower = self.site['details']['peakPower']
+        self.lastUpdateTime = self.site['details']['lastUpdateTime']
+        self.installationDate = self.site['details']['installationDate']
+        self.ptoDate = self.site['details']['ptoDate']
+        self.notes = self.site['details']['notes']
+        self.type = self.site['details']['type']
+        self.location = self.site['details']['location']
+        self.primaryModule = self.site['details']['primaryModule']
+        self.uris = self.site['details']['uris']
+        self.publicSettings = self.site['details']['publicSettings']
+        self.energy_details = self.get_energy_details(start_date, end_date, "QUARTER_OF_AN_HOUR")
+        self.current_power = self.get_current_power()
+        self.site_inverters = self.get_site_inverters()
+        self.meters_data = self.get_meters_data()
 
-        
     def get_energy_details(self, start_date, end_date, timeUnit):
         base_url = "https://monitoringapi.solaredge.com/site/{}/energy?timeUnit={}&endDate={}&startDate={}&api_key={}"
         url = base_url.format(self.site_id, timeUnit, end_date, start_date, self.api_key)
@@ -83,19 +75,13 @@ class SolarEdgeSite:
         return current_power
 
     def get_site_inverters(self):
-        base_url = "https://monitoringapi.solaredge.com/site/{}/inverters?api_key={}"
+        base_url = "https://monitoringapi.solaredge.com/equipment/{}/list?api_key={}"
         url = base_url.format(self.site_id, self.api_key)
         inverters = requests.get(url).json()
         return inverters
-
-    def get_site_as_json(self):
-        base_url = "https://monitoringapi.solaredge.com/site/{}/details?api_key={}"
-        url = base_url.format(self.site_id, self.api_key)
-        site = requests.get(url).json()
-        return site
     
-    def get_meter_pv_production_power(self):
-        base_url = "https://monitoringapi.solaredge.com/site/{}/meters?api_key={}"
+    def get_meters_data(self):
+        base_url = " https://monitoringapi.solaredge.com/site/{}/meters?meters=Production,Consumption&startTime=2013-05-5%2011:00:00&endTime=2013-05-05%2013:00:00&api_key={}"
         url = base_url.format(self.site_id, self.api_key)
         meters = requests.get(url).json()
         return meters
