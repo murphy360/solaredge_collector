@@ -1,0 +1,1 @@
+https://knowledge-center.solaredge.com/sites/kc/files/se_monitoring_api.pdf 
