@@ -2,6 +2,12 @@ FROM ubuntu:22.04
 
 WORKDIR /
 
+RUN mkdir /solaredge && \
+    mkdir /solaredge/scripts && \
+    mkdir /solaredge/conf && \
+     mkdir /solaredge/logs && \
+    mkdir /solaredge/metrics
+
 COPY /scripts /solaredge/scripts
 COPY /conf /solaredge/conf
 COPY requirements.txt /solaredge/requirements.txt
