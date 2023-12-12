@@ -5,7 +5,7 @@ WORKDIR /
 RUN mkdir /solaredge && \
     mkdir /solaredge/scripts && \
     mkdir /solaredge/conf && \
-     mkdir /solaredge/logs && \
+    mkdir /solaredge/logs && \
     mkdir /solaredge/metrics
 
 COPY /scripts /solaredge/scripts
