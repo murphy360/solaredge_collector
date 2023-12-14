@@ -9,7 +9,7 @@ api_key = os.environ.get("SOLAR_EDGE_API_KEY")
 account_key = os.environ.get("SOLAREDGE_ACCOUNT_KEY")
 request_interval = 30 # minutes
 mysite = solar_edge_site.SolarEdgeSite(account_key, api_key)
-metrics_directory = "/solaredge/metrics/"
+metrics_directory = "/var/www/html/solaredge/metrics/"
 
 
 # Define main function

@@ -6,7 +6,7 @@ RUN mkdir /solaredge && \
     mkdir /solaredge/scripts && \
     mkdir /solaredge/conf && \
     mkdir /solaredge/logs && \
-    mkdir /solaredge/metrics
+    mkdir -p /var/www/html/solaredge/metrics/
 
 COPY /scripts /solaredge/scripts
 COPY /conf /solaredge/conf
