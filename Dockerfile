@@ -20,7 +20,7 @@ RUN pip3 install -r /solaredge/requirements/requirements_python.txt
 
 # Move Apache configuration
 COPY /conf/apache2.conf /etc/apache2/apache2.conf
-
+EXPOSE 80
 
 # Run Python script on container startup
-CMD ["python3", "/solaredge/scripts/main.py"]
+CMD ["/solaredge/scripts/startup.sh"]
