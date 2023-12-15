@@ -25,4 +25,4 @@ COPY /conf/apache2.conf /etc/apache2/apache2.conf
 EXPOSE 80
 
 # Run Python script on container startup
-CMD ["/solaredge/scripts/main.sh"]
+CMD ["python3", "/solaredge/scripts/main.py"]
