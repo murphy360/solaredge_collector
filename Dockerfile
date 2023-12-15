@@ -22,5 +22,8 @@ RUN pip3 install -r /solaredge/requirements/requirements_python.txt
 COPY /conf/apache2.conf /etc/apache2/apache2.conf
 EXPOSE 80
 
+# Set permission for startup script
+RUN chmod +x /solaredge/scripts/startup.sh
+
 # Run Python script on container startup
 CMD ["/solaredge/scripts/startup.sh"]
