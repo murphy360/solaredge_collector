@@ -13,25 +13,21 @@ metrics_directory = "/var/www/html/"
 
 
 # Define main function
-def main():
-    # Check power settings every 30 minutes
-    # if power is more than 0, then log it
-    
-    while True:
+while True:
         today_string = datetime.date.today().isoformat()
         first_day_of_this_month = today_string[:8] + "01"
-        mysite.refresh_site_data(today_string, first_day_of_this_month)
+        mysite.refresh_site_data(first_day_of_this_month, today_string)
         # to json file
         with open("{}energy_details.json".format(metrics_directory), "w") as outfile:
             outfile.write(str(mysite.energy_details))
         # Energy Details to JSON
-        with open("{}energy_details.json".format(metrics_directory), "w") as outfile:
+        with open("{}metrics".format(metrics_directory), "w") as outfile:
             outfile.write(str(mysite.energy_details))
         # Current Power to JSON
-        with open("{}current_power.json".format(metrics_directory), "w") as outfile:
+        with open("{}current_power".format(metrics_directory), "w") as outfile:
             outfile.write(str(mysite.current_power))
         # Inverters to JSON
-        with open("{}site_inverters.json".format(metrics_directory), "w") as outfile:
+        with open("{}site_inverters".format(metrics_directory), "w") as outfile:
             outfile.write(str(mysite.site_inverters))
         # Meters Data to JSON
         with open("{}meters_data".format(metrics_directory), "w") as outfile:

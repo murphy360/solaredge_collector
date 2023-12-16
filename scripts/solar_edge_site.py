@@ -32,7 +32,6 @@
 
 import requests
 
-
 class SolarEdgeSite:
     def __init__(self, site_id, api_key):
         self.site_id = site_id
@@ -60,7 +59,7 @@ class SolarEdgeSite:
         self.current_power = self.get_current_power()
         self.site_inverters = self.get_site_inverters()
         self.meters_data = self.get_meters_data()
-
+    
     def get_energy_details(self, start_date, end_date, timeUnit):
         base_url = "https://monitoringapi.solaredge.com/site/{}/energy?timeUnit={}&endDate={}&startDate={}&api_key={}"
         url = base_url.format(self.site_id, timeUnit, end_date, start_date, self.api_key)
