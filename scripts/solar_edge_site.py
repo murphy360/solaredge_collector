@@ -41,6 +41,7 @@ class SolarEdgeSite:
     def refresh_site_data(self, start_date, end_date):
         base_url = "https://monitoringapi.solaredge.com/site/{}/details?api_key={}"
         url = base_url.format(self.site_id, self.api_key)
+        self.class_tag = "solaredge_collector_"
         self.site = requests.get(url).json()
         self.id = self.site['details']['id']
         self.name = self.site['details']['name']
@@ -57,7 +58,7 @@ class SolarEdgeSite:
         self.uris = self.site['details']['uris']
         self.publicSettings = self.site['details']['publicSettings']
         self.energy_details = self.get_energy_details(start_date, end_date, "QUARTER_OF_AN_HOUR")
-        self.current_power = self.get_current_power()
+        self.overview = self.get_overview()
         self.site_inverters = self.get_site_inverters()
         self.meters_data = self.get_meters_data()
     
@@ -66,13 +67,27 @@ class SolarEdgeSite:
         url = base_url.format(self.site_id, timeUnit, end_date, start_date, self.api_key)
         energy_details = requests.get(url).json()
         return energy_details
-
-    def get_current_power(self):
+    
+    def get_overview(self):
         base_url = "https://monitoringapi.solaredge.com/site/{}/overview?api_key={}"
         url = base_url.format(self.site_id, self.api_key)
         overview = requests.get(url).json()
+        return overview
+
+    def get_current_power(self):
+        overview = self.get_overview()
         current_power = overview.get('overview').get('currentPower').get('power')
         return current_power
+    
+    def get_current_power_string(self):
+        help_string = "# HELP {}current_power Current Production Power".format(self.class_tag)
+        type_string = "# TYPE {}current_power gauge".format(self.class_tag)
+        time_epoch_now = int(datetime.datetime.now().timestamp())
+        current_power = self.get_current_power()
+        current_power_tag = "{power=\"watthours\"}"
+        current_power_string = "{}current_power{} {} {}".format(self.class_tag, current_power_tag, current_power, time_epoch_now)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, current_power_string)
+        return return_string
 
     def get_site_inverters(self):
         base_url = "https://monitoringapi.solaredge.com/equipment/{}/list?api_key={}"
@@ -89,9 +104,8 @@ class SolarEdgeSite:
     def get_prometheus_formatted_energy_details(self):
         prometheus_metrics = ""
         #metric_name [ "{" label_name "=" `"` label_value `"` { "," label_name "=" `"` label_value `"` } [ "," ] "}" ] value [ timestamp ]
-        time_epoch_now = int(datetime.datetime.now().timestamp())
-        current_power_tag = "{power=\"watthours\"}"
-        current_power_string = "solaredge_current_power{} {} {}".format(current_power_tag, self.current_power, time_epoch_now)
+        
+        current_power_string = self.get_current_power_string()
         
         prometheus_metrics += current_power_string + "\n"
         return prometheus_metrics
