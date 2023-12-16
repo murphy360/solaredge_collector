@@ -24,7 +24,7 @@ while True:
 
     # Overview to JSON
     with open("{}overview.json".format(metrics_directory), "w") as outfile:
-        outfile.write(str(mysite.overview))
+        outfile.write(str(mysite.site_overview))
 
     now_string = datetime.datetime.now().isoformat()
     future_string = datetime.datetime.now() + datetime.timedelta(minutes=request_interval)
