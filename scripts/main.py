@@ -9,7 +9,7 @@ api_key = os.environ.get("SOLAR_EDGE_API_KEY")
 account_key = os.environ.get("SOLAREDGE_ACCOUNT_KEY")
 request_interval = 30 # minutes
 mysite = solar_edge_site.SolarEdgeSite(account_key, api_key)
-metrics_directory = "/var/www/html/solaredge/metrics/"
+metrics_directory = "/var/www/html/"
 
 
 # Define main function
@@ -34,7 +34,7 @@ def main():
         with open("{}site_inverters.json".format(metrics_directory), "w") as outfile:
             outfile.write(str(mysite.site_inverters))
         # Meters Data to JSON
-        with open("{}meters_data.json".format(metrics_directory), "w") as outfile:
+        with open("{}meters_data".format(metrics_directory), "w") as outfile:
             outfile.write(str(mysite.meters_data))
 
         now_string = datetime.datetime.now().isoformat()

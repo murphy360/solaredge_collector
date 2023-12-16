@@ -25,7 +25,7 @@ RUN pip3 install -r /solaredge/requirements/requirements_python.txt
 EXPOSE 80
 
 # Run Python script on container startup
-CMD ["python3", "/solaredge/scripts/main.py"]
+#CMD ["python3", "/solaredge/scripts/main.py"]
 
 # Start Apache and run Python script on container startup
-#CMD ["/bin/bash", "-c", "service apache2 start && python3 /solaredge/scripts/main.py"]
+CMD ["/bin/bash", "-c", "service apache2 start && python3 /solaredge/scripts/main.py"]
