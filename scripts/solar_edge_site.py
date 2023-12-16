@@ -91,7 +91,7 @@ class SolarEdgeSite:
         #metric_name [ "{" label_name "=" `"` label_value `"` { "," label_name "=" `"` label_value `"` } [ "," ] "}" ] value [ timestamp ]
         time_epoch_now = int(datetime.datetime.now().timestamp())
         current_power_tag = "{power=\"watthours\"}"
-        current_power_string = "current_power{} {} {}".format(current_power_tag, self.current_power, time_epoch_now)
+        current_power_string = "solaredge_current_power{} {} {}".format(current_power_tag, self.current_power, time_epoch_now)
         
         prometheus_metrics += current_power_string + "\n"
         return prometheus_metrics
