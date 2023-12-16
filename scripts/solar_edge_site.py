@@ -82,10 +82,10 @@ class SolarEdgeSite:
     def get_current_power_string(self):
         help_string = "# HELP {}current_power Current Production Power".format(self.class_tag)
         type_string = "# TYPE {}current_power gauge".format(self.class_tag)
-        time_epoch_now = int(datetime.datetime.now().timestamp())
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
         current_power = self.get_current_power()
-        current_power_tag = "{power=\"watthours\"}"
-        current_power_string = "{}current_power{} {} {}".format(self.class_tag, current_power_tag, current_power, time_epoch_now)
+        current_power_tag = "{{site=\"{}\"}}".format(self.site_id)
+        current_power_string = "{}current_power{} {}".format(self.class_tag, current_power_tag, current_power)
         return_string = "{}\n{}\n{}\n".format(help_string, type_string, current_power_string)
         return return_string
 
