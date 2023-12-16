@@ -13,35 +13,23 @@ metrics_directory = "/var/www/html/"
 
 
 # Define main function
-while True:
+ while True:
         today_string = datetime.date.today().isoformat()
         first_day_of_this_month = today_string[:8] + "01"
         mysite.refresh_site_data(first_day_of_this_month, today_string)
-        # to json file
-        with open("{}energy_details.json".format(metrics_directory), "w") as outfile:
-            outfile.write(str(mysite.energy_details))
-    
-        # Energy Details to JSON
-        with open("{}energy_details.json".format(metrics_directory), "w") as outfile:
-            outfile.write(str(mysite.energy_details))
-        # Current Power to JSON
-        with open("{}current_power.json".format(metrics_directory), "w") as outfile:
-            outfile.write(str(mysite.current_power))
-        # Inverters to JSON
-        with open("{}site_inverters.json".format(metrics_directory), "w") as outfile:
-            outfile.write(str(mysite.site_inverters))
-        # Meters Data to JSON
-        with open("{}meters_data.json".format(metrics_directory), "w") as outfile:
-            outfile.write(str(mysite.meters_data))
+
+        metrics = mysite.get_prometheus_formatted_energy_details()
+        with open("{}metrics".format(metrics_directory), "w") as outfile:
+            outfile.write(str(metrics))
+
+        # Overview to JSON
+        with open("{}overview.json".format(metrics_directory), "w") as outfile:
+            outfile.write(str(mysite.overview))
 
         now_string = datetime.datetime.now().isoformat()
         future_string = datetime.datetime.now() + datetime.timedelta(minutes=request_interval)
         future_string = future_string.isoformat()
 
-        metrics = mysite.get_prometheus_formatted_energy_details()
-        with open("{}metrics".format(metrics_directory), "w") as outfile:
-            outfile.write(str(metrics))
-       
         print("{} - Sleeping for {} minutes. Next Run will be at {}".format(now_string, request_interval, future_string))
         time.sleep(request_interval*60)
 
