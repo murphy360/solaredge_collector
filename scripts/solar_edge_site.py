@@ -168,12 +168,12 @@ class SolarEdgeSite:
         prometheus_metrics += lifetime_energy_string + "\n"
 
         # Write last update time to string
-        last_update_time_string = self.get_last_update_time_prometheus_string()
-        prometheus_metrics += last_update_time_string + "\n"
+        #last_update_time_string = self.get_last_update_time_prometheus_string()
+        #prometheus_metrics += last_update_time_string + "\n"
 
         # Write installation date to string
-        installation_date_string = self.get_installation_date_prometheus_string()
-        prometheus_metrics += installation_date_string + "\n"
+        #installation_date_string = self.get_installation_date_prometheus_string()
+        #prometheus_metrics += installation_date_string + "\n"
 
         # Write site peak power to string
         site_peak_power_string = self.get_site_peak_power_prometheus_string()
