@@ -32,7 +32,6 @@
 
 import datetime
 import requests
-from astral import Astral
 
 class SolarEdgeSite:
     def __init__(self, site_id, api_key):
@@ -89,32 +88,6 @@ class SolarEdgeSite:
 
         self.site_inverters = self.get_site_inverters()
         self.meters_data = self.get_meters_data()
-    
-    def is_daytime(self, datetime):
-        sunrise = self.get_sunrise(datetime)
-        print(sunrise)
-        sunset = self.get_sunset(datetime)
-        print(sunset)
-        if datetime > sunrise and datetime < sunset:
-            return True
-        else:
-            return False
-
-    def zip_to_lat_long(self, zip):
-        # TODO
-        return {'latitude': 0, 'longitude': 0}
-
-    def get_sunrise(self, datetime):
-        t = self.ts.utc(datetime.year, datetime.month, datetime.day)
-        f = almanac.sunrise_sunset(self.eph, self.location['latitude'], self.location['longitude'])
-        times = f(t)
-        return times[0].utc_datetime().isoformat()
-    
-    def get_sunset(self, datetime):
-        t = self.ts.utc(datetime.year, datetime.month, datetime.day)
-        f = almanac.sunrise_sunset(self.eph, self.location['latitude'], self.location['longitude'])
-        times = f(t)
-        return times[1].utc_datetime().isoformat()
 
     def get_api_version(self):
         url = "https://monitoringapi.solaredge.com/version/current"
