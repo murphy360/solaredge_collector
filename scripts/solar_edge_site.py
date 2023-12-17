@@ -32,6 +32,7 @@
 
 import datetime
 import requests
+from astral import Astral
 
 class SolarEdgeSite:
     def __init__(self, site_id, api_key):
@@ -64,6 +65,8 @@ class SolarEdgeSite:
         self.notes = self.site_details['details']['notes']
         self.type = self.site_details['details']['type']
         self.location = self.site_details['details']['location']
+        self.zip = self.site_details['details']['location']['zip']
+        self.city = self.site_details['details']['location']['city']
         self.primaryModule = self.site_details['details']['primaryModule']
         self.uris = self.site_details['details']['uris']
         self.publicSettings = self.site_details['details']['publicSettings']
@@ -87,6 +90,32 @@ class SolarEdgeSite:
         self.site_inverters = self.get_site_inverters()
         self.meters_data = self.get_meters_data()
     
+    def is_daytime(self, datetime):
+        sunrise = self.get_sunrise(datetime)
+        print(sunrise)
+        sunset = self.get_sunset(datetime)
+        print(sunset)
+        if datetime > sunrise and datetime < sunset:
+            return True
+        else:
+            return False
+
+    def zip_to_lat_long(self, zip):
+        # TODO
+        return {'latitude': 0, 'longitude': 0}
+
+    def get_sunrise(self, datetime):
+        t = self.ts.utc(datetime.year, datetime.month, datetime.day)
+        f = almanac.sunrise_sunset(self.eph, self.location['latitude'], self.location['longitude'])
+        times = f(t)
+        return times[0].utc_datetime().isoformat()
+    
+    def get_sunset(self, datetime):
+        t = self.ts.utc(datetime.year, datetime.month, datetime.day)
+        f = almanac.sunrise_sunset(self.eph, self.location['latitude'], self.location['longitude'])
+        times = f(t)
+        return times[1].utc_datetime().isoformat()
+
     def get_api_version(self):
         url = "https://monitoringapi.solaredge.com/version/current"
         api_version = requests.get(url)
@@ -180,16 +209,16 @@ class SolarEdgeSite:
         prometheus_metrics += site_peak_power_string + "\n"
 
         # Write manufacturer name to string
-        manufacturer_name_string = self.get_manufacturer_name_prometheus_string()
-        prometheus_metrics += manufacturer_name_string + "\n"
+        #manufacturer_name_string = self.get_manufacturer_name_prometheus_string()
+        #prometheus_metrics += manufacturer_name_string + "\n"
 
         # Write model name to string
-        model_name_string = self.get_model_name_prometheus_string()
-        prometheus_metrics += model_name_string + "\n"
+        #model_name_string = self.get_model_name_prometheus_string()
+        #prometheus_metrics += model_name_string + "\n"
 
         # Write API version to string
-        API_version_string = self.get_API_version_prometheus_string()
-        prometheus_metrics += API_version_string + "\n"
+        #API_version_string = self.get_API_version_prometheus_string()
+        #prometheus_metrics += API_version_string + "\n"
 
         # Write CO2 saved to string
         co2_saved_string = self.get_co2_saved_prometheus_string()

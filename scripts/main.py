@@ -37,6 +37,3 @@ while True:
 
 # Call main function
 main()
-
-
-
