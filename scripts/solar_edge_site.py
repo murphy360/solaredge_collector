@@ -8,6 +8,7 @@ class SolarEdgeSite:
         self.api_key = api_key
         self.api_hits = 0
         self.inverters = []
+        print("Initializing SolarEdge Site {}".format(self.site_id))
 
     def refresh_site_data(self, start_date, end_date):
         self.class_tag = "solaredge_collector_"
@@ -425,5 +426,6 @@ class SolarEdgeSite:
         return return_string
     
     def reset_api_hits(self):
+        print("Resetting API Hits")
         self.api_hits = 0
         return self.api_hits
