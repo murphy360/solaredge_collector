@@ -43,12 +43,10 @@ def main():
         location = nominatim_service.geocode('{}'.format(mysite.city))
         r = requests.get('https://api.sunrise-sunset.org/json', params={'lat': location.latitude, 'lng': location.longitude, 'formatted': 0}).json()['results']
         
-        print("SunriseData: {}".format(r))
-
-        # r['sunrise'] and r['sunset'] format 2023-12-17T14:42:47+00:00
         sunrise_datetime_utc = datetime.datetime.strptime(r['sunrise'], "%Y-%m-%dT%H:%M:%S+00:00")
         sunset_datetime_utc = datetime.datetime.strptime(r['sunset'], "%Y-%m-%dT%H:%M:%S+00:00")
         now_utc = datetime.datetime.now()
+        
         # If the sun is up, then sleep for [request_interval] minutes
         # If the sun is down and power is less than 1, then sleep until sunrise - [request_interval] minutes
         # SolarEdge API only updates every 15 minutes, so we shouldn't need to check more often than that

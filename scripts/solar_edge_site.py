@@ -125,7 +125,6 @@ class SolarEdgeSite:
         url = base_url.format(self.site_id, self.api_key)
         inventory = requests.get(url).json()
         self.api_hits += 1
-        print(inventory)
         return inventory
     
     def get_equipment_change_log(self):
