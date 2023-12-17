@@ -52,8 +52,7 @@ class SolarEdgeSite:
 
         # Parse Site Energy Details
         self.site_details = self.get_site_details()
-        
-        
+       
         self.id = self.site_details['details']['id']
         self.name = self.site_details['details']['name']
         self.accountId = self.site_details['details']['accountId']
@@ -149,6 +148,13 @@ class SolarEdgeSite:
         print("Environmental Benefits")
         print(environmental_benefits)
         return environmental_benefits
+    
+    def get_current_power_flow(self):
+        base_url = "https://monitoringapi.solaredge.com/site/{}/currentPowerFlow?api_key={}"
+        url = base_url.format(self.site_id, self.api_key)
+        current_power_flow = requests.get(url).json()
+        print(current_power_flow)
+        return current_power_flow
 
     def get_prometheus_formatted_energy_details(self):
         prometheus_metrics = ""
