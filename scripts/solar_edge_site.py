@@ -70,9 +70,21 @@ class SolarEdgeSite:
         self.publicSettings = self.site_details['details']['publicSettings']
 
         # Parse API Version
+        # TODO
         self.api_version = self.get_api_version()
         
-        
+        # Parse Site Inventory
+        # TODO
+        self.site_inventory = self.get_site_inventory()
+
+        # Parse Environmental Benefits
+        self.environmental_benefits = self.get_environmental_benefits()
+        self.co2_saved = self.environmental_benefits['envBenefits']['gasEmissionSaved']['co2']
+        self.so2_saved = self.environmental_benefits['envBenefits']['gasEmissionSaved']['so2']
+        self.nox_saved = self.environmental_benefits['envBenefits']['gasEmissionSaved']['nox']
+        self.trees_saved = self.environmental_benefits['envBenefits']['treesPlanted']
+        self.light_bulbs_saved = self.environmental_benefits['envBenefits']['lightBulbs']
+
         self.site_inverters = self.get_site_inverters()
         self.meters_data = self.get_meters_data()
     
@@ -115,6 +127,28 @@ class SolarEdgeSite:
         url = base_url.format(self.site_id, self.api_key)
         meters = requests.get(url).json()
         return meters
+    
+    def get_site_inventory(self):
+        base_url = "https://monitoringapi.solaredge.com/site/{}/inventory?api_key={}"
+        url = base_url.format(self.site_id, self.api_key)
+        inventory = requests.get(url).json()
+        print(inventory)
+        return inventory
+    
+    def get_equipment_change_log(self):
+        base_url = "https://monitoringapi.solaredge.com/equipment/{}/changeLog?api_key={}"
+        url = base_url.format(self.site_id, self.api_key)
+        equipment_change_log = requests.get(url).json()
+        print(equipment_change_log)
+        return equipment_change_log
+    
+    def get_environmental_benefits(self):
+        base_url = "https://monitoringapi.solaredge.com/site/{}/envBenefits?systemUnits=Imperial&api_key={}"
+        url = base_url.format(self.site_id, self.api_key)
+        environmental_benefits = requests.get(url).json()
+        print("Environmental Benefits")
+        print(environmental_benefits)
+        return environmental_benefits
 
     def get_prometheus_formatted_energy_details(self):
         prometheus_metrics = ""
@@ -151,8 +185,28 @@ class SolarEdgeSite:
         API_version_string = self.get_API_version_prometheus_string()
         prometheus_metrics += API_version_string + "\n"
 
-        return prometheus_metrics
+        # Write CO2 saved to string
+        co2_saved_string = self.get_co2_saved_prometheus_string()
+        prometheus_metrics += co2_saved_string + "\n"
 
+        # Write SO2 saved to string
+        so2_saved_string = self.get_so2_saved_prometheus_string()
+        prometheus_metrics += so2_saved_string + "\n"
+
+        # Write NOX saved to string
+        nox_saved_string = self.get_nox_saved_prometheus_string()
+        prometheus_metrics += nox_saved_string + "\n"
+
+        # Write trees saved to string
+        trees_saved_string = self.get_trees_saved_prometheus_string()
+        prometheus_metrics += trees_saved_string + "\n"
+
+        # Write light bulbs saved to string
+        light_bulbs_saved_string = self.get_light_bulbs_saved_prometheus_string()
+        prometheus_metrics += light_bulbs_saved_string + "\n"
+
+        return prometheus_metrics
+    
     def get_current_power_prometheus_string(self):
         help_string = "# HELP {}current_power Current Production Power".format(self.class_tag)
         type_string = "# TYPE {}current_power gauge".format(self.class_tag)
@@ -165,8 +219,7 @@ class SolarEdgeSite:
 
     def get_lifetime_energy_prometheus_string(self):
         help_string = "# HELP {}lifetime_energy Lifetime Energy".format(self.class_tag)
-        type_string = "# TYPE {}lifetime_energy gauge".format(self.class_tag)
-        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        type_string = "# TYPE {}lifetime_energy counter".format(self.class_tag)
         lifetime_energy = self.life_time_energy
         lifetime_energy_tag = "{{site=\"{}\"}}".format(self.site_id)
         lifetime_energy_string = "{}lifetime_energy{} {}".format(self.class_tag, lifetime_energy_tag, lifetime_energy)
@@ -175,11 +228,12 @@ class SolarEdgeSite:
     
     def get_site_peak_power_prometheus_string(self):
         help_string = "# HELP {}peak_power Peak Power".format(self.class_tag)
-        type_string = "# TYPE {}peak_power gauge".format(self.class_tag)
-        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        type_string = "# TYPE {}peak_power counter".format(self.class_tag)
         peak_power = self.peakPower
         peak_power_tag = "{{site=\"{}\"}}".format(self.site_id)
-        peak_power_string = "{}peak_power{} {}".format(self.class_tag, peak_power_tag, peak_power)  
+        peak_power_string = "{}peak_power{} {}".format(self.class_tag, peak_power_tag, peak_power) 
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, peak_power_string)
+        return return_string 
     
     def get_last_update_time_prometheus_string(self):
         help_string = "# HELP {}last_update_time Last Update Time".format(self.class_tag)
@@ -249,4 +303,54 @@ class SolarEdgeSite:
         API_version_tag = "{{site=\"{}\"}}".format(self.site_id)
         API_version_string = "{}API_version{} \"{}\"".format(self.class_tag, API_version_tag, API_version)
         return_string = "{}\n{}\n{}\n".format(help_string, type_string, API_version_string)
+        return return_string
+    
+    def get_co2_saved_prometheus_string(self):
+        help_string = "# HELP {}co2_saved CO2 Saved".format(self.class_tag)
+        type_string = "# TYPE {}co2_saved gauge".format(self.class_tag)
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        co2_saved = self.co2_saved
+        co2_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
+        co2_saved_string = "{}co2_saved{} {}".format(self.class_tag, co2_saved_tag, co2_saved)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, co2_saved_string)
+        return return_string
+    
+    def get_so2_saved_prometheus_string(self):
+        help_string = "# HELP {}so2_saved SO2 Saved".format(self.class_tag)
+        type_string = "# TYPE {}so2_saved gauge".format(self.class_tag)
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        so2_saved = self.so2_saved
+        so2_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
+        so2_saved_string = "{}so2_saved{} {}".format(self.class_tag, so2_saved_tag, so2_saved)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, so2_saved_string)
+        return return_string
+    
+    def get_nox_saved_prometheus_string(self):
+        help_string = "# HELP {}nox_saved NOX Saved".format(self.class_tag)
+        type_string = "# TYPE {}nox_saved gauge".format(self.class_tag)
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        nox_saved = self.nox_saved
+        nox_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
+        nox_saved_string = "{}nox_saved{} {}".format(self.class_tag, nox_saved_tag, nox_saved)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, nox_saved_string)
+        return return_string
+    
+    def get_trees_saved_prometheus_string(self):
+        help_string = "# HELP {}trees_saved Trees Saved".format(self.class_tag)
+        type_string = "# TYPE {}trees_saved gauge".format(self.class_tag)
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        trees_saved = self.trees_saved
+        trees_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
+        trees_saved_string = "{}trees_saved{} {}".format(self.class_tag, trees_saved_tag, trees_saved)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, trees_saved_string)
+        return return_string
+    
+    def get_light_bulbs_saved_prometheus_string(self):
+        help_string = "# HELP {}light_bulbs_saved Light Bulbs Saved".format(self.class_tag)
+        type_string = "# TYPE {}light_bulbs_saved gauge".format(self.class_tag)
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        light_bulbs_saved = self.light_bulbs_saved
+        light_bulbs_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
+        light_bulbs_saved_string = "{}light_bulbs_saved{} {}".format(self.class_tag, light_bulbs_saved_tag, light_bulbs_saved)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, light_bulbs_saved_string)
         return return_string
