@@ -307,7 +307,7 @@ class SolarEdgeSite:
     
     def get_co2_saved_prometheus_string(self):
         help_string = "# HELP {}co2_saved CO2 Saved".format(self.class_tag)
-        type_string = "# TYPE {}co2_saved gauge".format(self.class_tag)
+        type_string = "# TYPE {}co2_saved counter".format(self.class_tag)
         #time_epoch_now = int(datetime.datetime.now().timestamp())
         co2_saved = self.co2_saved
         co2_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
@@ -317,7 +317,7 @@ class SolarEdgeSite:
     
     def get_so2_saved_prometheus_string(self):
         help_string = "# HELP {}so2_saved SO2 Saved".format(self.class_tag)
-        type_string = "# TYPE {}so2_saved gauge".format(self.class_tag)
+        type_string = "# TYPE {}so2_saved counter".format(self.class_tag)
         #time_epoch_now = int(datetime.datetime.now().timestamp())
         so2_saved = self.so2_saved
         so2_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
@@ -327,7 +327,7 @@ class SolarEdgeSite:
     
     def get_nox_saved_prometheus_string(self):
         help_string = "# HELP {}nox_saved NOX Saved".format(self.class_tag)
-        type_string = "# TYPE {}nox_saved gauge".format(self.class_tag)
+        type_string = "# TYPE {}nox_saved counter".format(self.class_tag)
         #time_epoch_now = int(datetime.datetime.now().timestamp())
         nox_saved = self.nox_saved
         nox_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
@@ -337,7 +337,7 @@ class SolarEdgeSite:
     
     def get_trees_saved_prometheus_string(self):
         help_string = "# HELP {}trees_saved Trees Saved".format(self.class_tag)
-        type_string = "# TYPE {}trees_saved gauge".format(self.class_tag)
+        type_string = "# TYPE {}trees_saved counter".format(self.class_tag)
         #time_epoch_now = int(datetime.datetime.now().timestamp())
         trees_saved = self.trees_saved
         trees_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
@@ -347,7 +347,7 @@ class SolarEdgeSite:
     
     def get_light_bulbs_saved_prometheus_string(self):
         help_string = "# HELP {}light_bulbs_saved Light Bulbs Saved".format(self.class_tag)
-        type_string = "# TYPE {}light_bulbs_saved gauge".format(self.class_tag)
+        type_string = "# TYPE {}light_bulbs_saved counter".format(self.class_tag)
         #time_epoch_now = int(datetime.datetime.now().timestamp())
         light_bulbs_saved = self.light_bulbs_saved
         light_bulbs_saved_tag = "{{site=\"{}\"}}".format(self.site_id)
