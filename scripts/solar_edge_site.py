@@ -8,6 +8,7 @@ class SolarEdgeSite:
         self.api_key = api_key
         self.api_hits = 0
         self.inverters = []
+        self.awake = 1
         print("Initializing SolarEdge Site {}".format(self.site_id))
 
     def refresh_site_data(self, start_date, end_date):
@@ -223,9 +224,19 @@ class SolarEdgeSite:
         api_hits_string = self.get_api_hits_prometheus_string()
         prometheus_metrics += api_hits_string + "\n"
 
+        # Write awake to string
+        awake_string = self.get_awake_prometheus_string()
+        prometheus_metrics += awake_string + "\n"
+
         return prometheus_metrics
     
-    
+    def get_awake_prometheus_string(self):
+        help_string = "# HELP {}awake Is the site awake?".format(self.class_tag)
+        type_string = "# TYPE {}awake gauge".format(self.class_tag)
+        awake_tag = "{{site=\"{}\"}}".format(self.site_id)
+        awake_string = "{}awake{} {}".format(self.class_tag, awake_tag, self.awake)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, awake_string)
+        return return_string
 
     def get_last_year_energy_prometheus_string(self):
         help_string = "# HELP {}last_year_energy Last Year Energy".format(self.class_tag)
