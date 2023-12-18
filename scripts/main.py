@@ -8,8 +8,8 @@ from geopy.geocoders import Nominatim
 from tzwhere import tzwhere
 
 # Define variables
-api_key = os.environ.get("SOLAR_EDGE_API_KEY")
 account_key = os.environ.get("SOLAREDGE_ACCOUNT_KEY")
+api_key = os.environ.get("SOLAR_EDGE_API_KEY")
 metrics_directory = "/var/www/html/"
 
 request_interval = 15 # minutes (15 minutes is the minimum allowed by the SolarEdge API)
