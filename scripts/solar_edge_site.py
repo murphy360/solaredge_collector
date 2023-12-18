@@ -9,9 +9,18 @@ class SolarEdgeSite:
         self.api_hits = 0
         self.inverters = []
         self.awake = 1
+        self.site_inverters = self.get_site_inverters()
+        self.meters_data = self.get_meters_data()
+        self.site_inventory = self.get_site_inventory()
+        self.num_optimizers = 0
+        for inverter in self.site_inventory['Inventory']['inverters']:
+            inverter = solar_edge_inverter.SolarEdgeInverter(inverter['manufacturer'], inverter['model'], inverter['communicationMethod'], inverter['dsp1Version'], inverter['dsp2Version'], inverter['cpuVersion'], inverter['SN'], inverter['name'], inverter['connectedOptimizers'], self.site_id, self.api_key)
+            self.inverters.append(inverter)
+        self.refresh_site_data()
         print("Initializing SolarEdge Site {}".format(self.site_id))
 
-    def refresh_site_data(self, start_date, end_date):
+    def refresh_site_data(self):
+
         self.class_tag = "solaredge_collector_"
 
         # Parse Site Overview Data
@@ -49,14 +58,7 @@ class SolarEdgeSite:
         
         # Parse Site Inventory
         # TODO
-        self.site_inventory = self.get_site_inventory()
-        self.num_optimizers = 0
-        # class SolarEdgeInverter:
-        # def __init__(self, manufacturer, model, communication_method, dsp1_version, dsp2_version, cpu_version, serial_number, inverter_id, inverter_name, num_optimizers, site_id, account_key, api_key):
-        
-        for inverter in self.site_inventory['Inventory']['inverters']:
-            inverter = solar_edge_inverter.SolarEdgeInverter(inverter['manufacturer'], inverter['model'], inverter['communicationMethod'], inverter['dsp1Version'], inverter['dsp2Version'], inverter['cpuVersion'], inverter['SN'], inverter['name'], inverter['connectedOptimizers'], self.site_id, self.api_key)
-            self.inverters.append(inverter)
+
         
         #self.number_of_optimizers = self.site_inventory['inventory']['inverters']['count']
         #self.number_of_inverters = self.site_inventory['inventory']['inverters']['count']
@@ -72,8 +74,7 @@ class SolarEdgeSite:
         self.trees_saved = self.environmental_benefits['envBenefits']['treesPlanted']
         self.light_bulbs_saved = self.environmental_benefits['envBenefits']['lightBulbs']
 
-        self.site_inverters = self.get_site_inverters()
-        self.meters_data = self.get_meters_data()
+        
 
     def get_api_version(self):
         url = "https://monitoringapi.solaredge.com/version/current"
