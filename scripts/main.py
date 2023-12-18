@@ -33,8 +33,10 @@ def main():
         sunset_datetime = datetime.datetime.strptime(r['sunset'], "%Y-%m-%dT%H:%M:%S%z")
 
         sleep_seconds = 0
+        sleep_until = now
         if sunrise_datetime-datetime.timedelta(minutes=request_interval) < now < sunset_datetime:
             print("Sun is up. Sleeping for {} minutes.".format(request_interval))
+            sleep_until = now + datetime.timedelta(minutes=request_interval)
             sleep_seconds = request_interval*60
         else:
             print("Sun is down. Sleeping until sunrise - {} minutes.".format(request_interval))
