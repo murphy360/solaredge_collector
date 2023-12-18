@@ -16,10 +16,7 @@ COPY /requirements /solaredge/requirements
 RUN apt update && apt install -y python3 python3-pip apache2
 
 # Install Python dependencies
-RUN pip3 install -r /solaredge/requirements/requirements_python.txt
-
-# Move Apache configuration
-#COPY /conf/apache2.conf /etc/apache2/apache2.conf
+RUN pip3 install --upgrade -r /solaredge/requirements/requirements_python.txt
 
 # Expose port 80
 EXPOSE 80
