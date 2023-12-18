@@ -50,7 +50,7 @@ def main():
             sleep_seconds = (sleep_until - now).total_seconds()
             
 
-
+        mysite.set_next_wakeup_datetime(sleep_until)
         mysite.refresh_site_data()
         metrics = mysite.get_prometheus_formatted_energy_details()
         with open("{}metrics".format(metrics_directory), "w") as outfile:

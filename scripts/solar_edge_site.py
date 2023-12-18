@@ -3,8 +3,9 @@ import requests
 import solar_edge_inverter
 
 class SolarEdgeSite:
-    def __init__(self, site_id, api_key):
+    def __init__(self, site_id, api_key): 
         self.site_id = site_id
+        print("Initializing SolarEdge Site {}".format(self.site_id))
         self.api_key = api_key
         self.api_hits = 0
         self.inverters = []
@@ -16,9 +17,13 @@ class SolarEdgeSite:
         for inverter in self.site_inventory['Inventory']['inverters']:
             inverter = solar_edge_inverter.SolarEdgeInverter(inverter['manufacturer'], inverter['model'], inverter['communicationMethod'], inverter['dsp1Version'], inverter['dsp2Version'], inverter['cpuVersion'], inverter['SN'], inverter['name'], inverter['connectedOptimizers'], self.site_id, self.api_key)
             self.inverters.append(inverter)
+        self.next_wakeup_datetime = datetime.datetime.now()
         self.refresh_site_data()
-        print("Initializing SolarEdge Site {}".format(self.site_id))
 
+    def set_next_wakeup_datetime(self, next_wakeup_datetime):
+        self.next_wakeup_datetime = next_wakeup_datetime
+        return self.next_wakeup_datetime
+    
     def refresh_site_data(self):
 
         self.class_tag = "solaredge_collector_"
@@ -48,6 +53,8 @@ class SolarEdgeSite:
         self.location = self.site_details['details']['location']
         self.zip = self.site_details['details']['location']['zip']
         self.city = self.site_details['details']['location']['city']
+        self.country = self.site_details['details']['location']['country']
+        self.timezone = self.site_details['details']['location']['timeZone']
         self.primaryModule = self.site_details['details']['primaryModule']
         self.uris = self.site_details['details']['uris']
         self.publicSettings = self.site_details['details']['publicSettings']
@@ -229,7 +236,27 @@ class SolarEdgeSite:
         awake_string = self.get_awake_prometheus_string()
         prometheus_metrics += awake_string + "\n"
 
+        # Write site details to string
+        site_details_string = self.get_site_details_prometheus_string()
+        prometheus_metrics += site_details_string + "\n"
+
         return prometheus_metrics
+    
+    def get_site_details_prometheus_string(self):
+        help_string = "# HELP {}site_details Site Details".format(self.class_tag)
+        type_string = "# TYPE {}site_details counter".format(self.class_tag)
+        #time_epoch_now = int(datetime.datetime.now().timestamp())
+        site_details_tag = "site=\"{}\"".format(self.site_id)
+        site_city_tag = "city=\"{}\"".format(self.city)
+        site_zip_tag = "zip=\"{}\"".format(self.zip)
+        manufacturer_name_tag = "manufacturer_name=\"{}\"".format(self.primaryModule['manufacturerName'])
+        model_name_tag = "model_name=\"{}\"".format(self.primaryModule['modelName'])
+        installation_date_tag = "installation_date=\"{}\"".format(self.installationDate)
+        max_power_tag = "max_power=\"{}\"".format(self.primaryModule['maximumPower'])
+        next_wakeup_tag = "next_wakeup=\"{}\"".format(self.next_wakeup_datetime)
+        site_details_string = "{}site_details{{{},{},{},{},{},{},{},{}}} {}".format(self.class_tag, site_details_tag, site_city_tag, site_zip_tag, manufacturer_name_tag, model_name_tag, installation_date_tag, max_power_tag, next_wakeup_tag, 1)
+        return_string = "{}\n{}\n{}\n".format(help_string, type_string, site_details_string)
+        return return_string
     
     def get_awake_prometheus_string(self):
         help_string = "# HELP {}awake Is the site awake?".format(self.class_tag)
