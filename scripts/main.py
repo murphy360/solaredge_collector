@@ -26,8 +26,7 @@ def main():
         timezone_str = tzw.tzNameAt(location.latitude, location.longitude)
         
         r = requests.get('https://api.sunrise-sunset.org/json', params={'lat': location.latitude, 'lng': location.longitude, 'formatted': 0, 'tzId':timezone_str}).json()
-        print(r)
-        tzId = r['tzId']
+        tzId = r['tzid']
         r = r['results']
         now = datetime.datetime.now(pytz.timezone(tzId))
         sunrise_datetime = datetime.datetime.strptime(r['sunrise'], "%Y-%m-%dT%H:%M:%S%z")
